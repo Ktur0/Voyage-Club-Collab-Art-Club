@@ -3,7 +3,7 @@ import pygame
 pygame.init()
 
 # Set up screen
-widthSr, heightSr = 800, 600
+widthSr, heightSr = 1280, 720
 screen = pygame.display.set_mode((widthSr, heightSr))
 
 run = True
