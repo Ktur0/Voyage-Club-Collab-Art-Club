@@ -1,5 +1,6 @@
 import pygame
 import pyperclip
+import webbrowser
 import os
 
 pygame.init()
@@ -45,6 +46,7 @@ PreviousPrintBut = pygame.Rect(1095, 625, 70, 70)
 # Start menu
 StrMenuScr = True
 
+
 # Story menu
 StoryMenuScr = False
 StoryFrame1 = pygame.Rect(46, 46, 571, 291)
@@ -62,16 +64,13 @@ ItemFrame = pygame.Rect(694, 105, 485, 585)
 PrintScrMenuScr = False
 PhotoFrame = pygame.Rect(412, 62, 456, 628)
 
-def clickClubButton():
-    if mouseHB.colliderect(VoyageLogoBut) and pygame.mouse.get_pressed()[0]:
-        with open("Text/voyageclubpage.txt", "r") as file:
-            content = file.read()
-        pyperclip.copy(content)
-
-    if mouseHB.colliderect(ArtLogoBut) and pygame.mouse.get_pressed()[0]:
-        with open("Text/artclubpage.txt", "r") as file:
-            content = file.read()
-        pyperclip.copy(content)
+def clickClubButton(events):
+    for event in events:
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if mouseHB.colliderect(VoyageLogoBut):
+                webbrowser.open("https://www.facebook.com/voyage.stc")
+            if mouseHB.colliderect(ArtLogoBut):
+                webbrowser.open("https://www.facebook.com/ArtclubTHD")
 
 def countFilesInDirectory(directory):
     return len([name for name in os.listdir(directory) if os.path.isfile(os.path.join(directory, name))])
@@ -83,8 +82,10 @@ while run:
     xMouse, yMouse = pygame.mouse.get_pos()
     mouseHB = pygame.Rect(xMouse, yMouse, mouseSize, mouseSize)
 
+    events = pygame.event.get()
+
     # Event
-    for event in pygame.event.get():
+    for event in events:
         if event.type == pygame.QUIT:
             run = False
     
@@ -92,20 +93,33 @@ while run:
     if StrMenuScr:
         screen.fill(WHITE)  # Clear screen with black
 
+        clickClubButton(events)  # Check if club buttons are clicked
+        for event in events:
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                # Check if the mouse is over the start button
+                if mouseHB.colliderect(StartBut):
+                    StrMenuScr = False
+                    StoryMenuScr = True
+
         # Draw buttons
         pygame.draw.circle(screen, RED, (VoyageLogoBut.centerx, VoyageLogoBut.centery), VoyageLogoBut.width // 2)
         pygame.draw.circle(screen, YELLOW, (ArtLogoBut.centerx, ArtLogoBut.centery), ArtLogoBut.width // 2)
         pygame.draw.circle(screen, GREY, (StartBut.centerx, StartBut.centery), StartBut.width // 2)
-
-        # Check for button clicks
-        clickClubButton()  # Check if club buttons are clicked
-        if mouseHB.colliderect(StartBut) and pygame.mouse.get_pressed()[0]:
-            StrMenuScr = False
-            StoryMenuScr = True
+        
+        
 
     elif StoryMenuScr:
         # Game logic can go here
         screen.fill(WHITE)  # Fill with gray for game screen
+
+        
+        clickClubButton(events)
+        for event in events:
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                # Check for next button click
+                if mouseHB.colliderect(StoryMenuNextBut):
+                    StoryMenuScr = False
+                    GameMenuScr = True
 
         # Draw story frames
         pygame.draw.rect(screen, GREY, StoryFrame1)
@@ -116,14 +130,22 @@ while run:
         # Draw next button
         pygame.draw.circle(screen, RED, (StoryMenuNextBut.centerx, StoryMenuNextBut.centery), StoryMenuNextBut.width // 2)
         
-        # Check for next button click
-        if mouseHB.colliderect(StoryMenuNextBut) and pygame.mouse.get_pressed()[0]:
-            StoryMenuScr = False
-            GameMenuScr = True
         
     elif GameMenuScr:
         # Game logic can go here
         screen.fill(WHITE)
+
+        clickClubButton(events)  # Check if club buttons are clicked
+        for event in events:
+            # Check for button clicks
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if mouseHB.colliderect(CameraBut):
+                    GameMenuScr = False
+                    PrintScrMenuScr = True
+                
+                if mouseHB.colliderect(HomeGameplayBut):
+                    GameMenuScr = False
+                    StrMenuScr = True
 
         # Draw character and item frames
         pygame.draw.rect(screen, BLUE, CharacterFrame)
@@ -140,16 +162,7 @@ while run:
         pygame.draw.circle(screen, GREY, (HatBut.centerx, HatBut.centery), HatBut.width // 2)
         pygame.draw.circle(screen, GREY, (SparePartsBut.centerx, SparePartsBut.centery), SparePartsBut.width // 2)
         pygame.draw.circle(screen, GREY, (EmotionBut.centerx, EmotionBut.centery), EmotionBut.width // 2)
-
-        # Check for button clicks
-        clickClubButton()  # Check if club buttons are clicked
-        if mouseHB.colliderect(CameraBut) and pygame.mouse.get_pressed()[0]:
-            GameMenuScr = False
-            PrintScrMenuScr = True
         
-        if mouseHB.colliderect(HomeGameplayBut) and pygame.mouse.get_pressed()[0]:
-            GameMenuScr = False
-            StrMenuScr = True
 
     elif PrintScrMenuScr:
         # Print screen logic can go here
@@ -168,9 +181,9 @@ while run:
         pygame.draw.circle(screen, GREY, (NextPrintBut.centerx, NextPrintBut.centery), NextPrintBut.width // 2)
         pygame.draw.circle(screen, GREY, (PreviousPrintBut.centerx, PreviousPrintBut.centery), PreviousPrintBut.width // 2)
 
-        for event in pygame.event.get():
-            # Check for button clicks
-            clickClubButton()
+        # Check for button clicks
+        clickClubButton(events)
+        for event in events:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if mouseHB.colliderect(DownloadBut):
                     subsurface = screen.subsurface(PhotoFrame).copy() 
