@@ -1,5 +1,4 @@
 import pygame
-import pyperclip
 import webbrowser
 import os
 
