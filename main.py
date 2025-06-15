@@ -1,14 +1,16 @@
 import pygame
-import pyperclip
 import webbrowser
 import os
 
 pygame.init()
 
 # Set up screen
+info = pygame.display.Info()
+pygame.display.set_caption("Voyage Club - Art Club")
 widthSr, heightSr = 1280, 720
 screen = pygame.display.set_mode((widthSr, heightSr))
 run = True
+
 
 # Colors
 WHITE = (255, 255, 255)
@@ -192,7 +194,7 @@ while run:
                 if mouseHB.colliderect(ReturnBut):
                     PrintScrMenuScr = False
                     GameMenuScr = True
-                    
+                     
                 if mouseHB.colliderect(HomePrintBut):
                     PrintScrMenuScr = False
                     StrMenuScr = True
