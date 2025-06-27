@@ -116,7 +116,7 @@ while run:
     elif StoryMenuScr:
         screen.fill(WHITE)
         clickClubButton(events)
-
+    
         for event in events:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if mouseHB.colliderect(StoryMenuNextBut):
