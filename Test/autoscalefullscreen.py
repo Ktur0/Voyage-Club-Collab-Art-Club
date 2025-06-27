@@ -9,7 +9,7 @@ screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 screen_width, screen_height = screen.get_size()
 
 def scale_rect(xr, yr, wr, hr):
-    return pygame.Rect(int(xr * screen_width), int(yr * screen_height), int(wr * screen_width), int(hr * screen_height))
+    return pygame.Rect(int(xr* screen_width), int(yr * screen_height), int(wr * screen_width), int(hr * screen_height))
 
 def update_buttons():
     global VoyageLogoBut, ArtLogoBut, StartBut, StoryMenuNextBut
