@@ -21,43 +21,6 @@ BLUE = (0, 0, 255)
 YELLOW = (255, 255, 0)
 GREY = (128, 128, 128)
 
-# Gameplay menu
-CharacterFrame = pygame.Rect(164, 62, 456, 628) 
-ItemFrame = pygame.Rect(694, 105, 485, 585)
-
-# Buttons for gameplay menu
-CameraBut = pygame.Rect(26, 257, 88, 88)
-HomeGameplayBut = pygame.Rect(26, 375, 88, 88)
-ShirtBut = pygame.Rect(1144, 120, 75, 75)
-PaintBut = pygame.Rect(1144, 215, 75, 75)
-ShoeBut = pygame.Rect(1144, 310, 75, 75)
-HatBut = pygame.Rect(1144, 405, 75, 75)
-SparePartsBut = pygame.Rect(1144, 500, 75, 75)
-EmotionBut = pygame.Rect(1144, 595, 75, 75)
-
-# Buttons for start screen
-VoyageLogoBut = pygame.Rect(1211, 20, 57, 57)
-ArtLogoBut = pygame.Rect(1134, 20, 57, 57)
-StartBut = pygame.Rect(575, 520, 130, 130)
-
-# Print screen menu
-PhotoFrame = pygame.Rect(412, 62, 456, 628)
-
-# Buttons for print screen menu
-DownloadBut = pygame.Rect(26, 198, 88, 88)
-ReturnBut = pygame.Rect(26, 316, 88, 88)
-HomePrintBut = pygame.Rect(26, 434, 88, 88)
-NextPrintBut = pygame.Rect(1185, 625, 70, 70)
-PreviousPrintBut = pygame.Rect(1095, 625, 70, 70)
-
-# Story menu
-StoryFrame1 = pygame.Rect(46, 46, 571, 291)
-StoryFrame2 = pygame.Rect(663, 46, 571, 291)  
-StoryFrame3 = pygame.Rect(46, 383, 571, 291)  
-StoryFrame4 = pygame.Rect(663, 383, 571, 291)  
-
-# Buttons for story menu
-StoryMenuNextBut = pygame.Rect(1167, 607, 88, 88) 
 
 # Mouse
 xMouse, yMouse = 0, 0
@@ -73,28 +36,8 @@ def clickClubButton(events):
             if mouseHB.colliderect(ArtLogoBut):
                 webbrowser.open("https://www.facebook.com/ArtclubTHD")
 
-# Image 
-menuBackground = pygame.image.load("Asset/ACAN-MENU/StartMenu.png")
-
-# Mouse
-xMouse, yMouse = 0, 0
-mouseSize = 20
-mouseHB = pygame.Rect(xMouse, yMouse, mouseSize, mouseSize)
-
-def scaleRect(rect):
-    rect.x = int(rect.x * (widthSr / screenInfo.current_w))
-    rect.y = int(rect.y * (heightSr / screenInfo.current_h))
-    rect.width = int(rect.width * (widthSr / screenInfo.current_w))
-    rect.height = int(rect.height * (heightSr / screenInfo.current_h))  
-    return rect
-
-def clickClubButton(events):
-    for event in events:
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            if mouseHB.colliderect(VoyageLogoBut):
-                webbrowser.open("https://www.facebook.com/voyage.stc")
-            if mouseHB.colliderect(ArtLogoBut):
-                webbrowser.open("https://www.facebook.com/ArtclubTHD")
+def scale_rect(xr, yr, wr, hr):
+    return pygame.Rect(int(xr* widthSr), int(yr * heightSr), int(wr * widthSr), int(hr * heightSr))
 
 def countFilesInDirectory(directory):
     return len([name for name in os.listdir(directory) if os.path.isfile(os.path.join(directory, name))])
@@ -115,7 +58,18 @@ while run:
     
     # Start menu logic
     if currentScreen == "StartMenu":
-        screen.fill(WHITE)  # Clear screen with black
+
+        # Images for start screen
+        StartMenuBackground = pygame.image.load("Asset/ACAN-MENU/StartMenu.png")
+        StartButton = pygame.image.load("Asset/Button/StartButton.png")
+
+        # UI for start screen
+        VoyageLogoBut = scale_rect(0.946, 0.027, 0.045, 0.08)
+        ArtLogoBut = scale_rect(0.886, 0.027, 0.045, 0.08)
+        StartBut = scale_rect(0.45, 0.72, 0.1, 0.18)
+
+        screen.blit(pygame.transform.smoothscale(StartMenuBackground, (widthSr, heightSr)), (0, 0))  # Fill with start menu background
+        screen.blit(pygame.transform.smoothscale(StartButton, (StartBut.width, StartBut.height)), (StartBut.x, StartBut.y))  # Draw start button
 
         clickClubButton(events)  # Check if club buttons are clicked
         for event in events:    
@@ -123,17 +77,36 @@ while run:
                 # Check if the mouse is over the start button
                 if mouseHB.colliderect(StartBut):
                     currentScreen = "StoryMenu"
-        
-        screen.blit(menuBackground, scaleRect(BackGround))  # Draw background image
-
+          
         # # Draw buttons
         # pygame.draw.circle(screen, RED, (VoyageLogoBut.centerx, VoyageLogoBut.centery), VoyageLogoBut.width // 2)
         # pygame.draw.circle(screen, YELLOW, (ArtLogoBut.centerx, ArtLogoBut.centery), ArtLogoBut.width // 2)
         # pygame.draw.circle(screen, GREY, (StartBut.centerx, StartBut.centery), StartBut.width // 2)
         
-        
     elif currentScreen == "StoryMenu":
-        screen.fill(WHITE)  # Fill with gray for game screen
+
+        # Images for story screen
+        StoryMenuNextButtonImage = pygame.image.load("Asset/Button/NextButton.png")
+
+        StoryImage1 = pygame.image.load("Asset/COMIC/1.png")
+        StoryImage2 = pygame.image.load("Asset/COMIC/2.png")
+        StoryImage3 = pygame.image.load("Asset/COMIC/3.png")   
+        StoryImage4 = pygame.image.load("Asset/COMIC/4.png")
+
+        # UI for story screen
+        StoryMenuNextBut = scale_rect(0.91, 0.87, 0.07, 0.12)
+        StoryFrame1 = scale_rect(0.036, 0.06, 0.44, 0.4)
+        StoryFrame2 = scale_rect(0.52, 0.06, 0.44, 0.4)
+        StoryFrame3 = scale_rect(0.036, 0.53, 0.44, 0.4)
+        StoryFrame4 = scale_rect(0.52, 0.53, 0.44, 0.4)
+
+        # Fill with story menu background
+        screen.fill(WHITE)
+        screen.blit(pygame.transform.smoothscale(StoryImage1, (widthSr, heightSr)), (0,0))  # Draw story image 1
+        screen.blit(pygame.transform.smoothscale(StoryImage2, (widthSr, heightSr)), (0,0))  # Draw story image 2
+        screen.blit(pygame.transform.smoothscale(StoryImage3, (widthSr, heightSr)), (0,0))  # Draw story image 3
+        screen.blit(pygame.transform.smoothscale(StoryImage4, (widthSr, heightSr)), (0,0))  # Draw story image 4
+        screen.blit(pygame.transform.smoothscale(StoryMenuNextButtonImage, (StoryMenuNextBut.width, StoryMenuNextBut.height)), (StoryMenuNextBut.x, StoryMenuNextBut.y))
 
         clickClubButton(events)
         for event in events:
@@ -143,15 +116,30 @@ while run:
                    currentScreen = "GameMenu"
 
         # Draw story frames
-        pygame.draw.rect(screen, GREY, StoryFrame1)
-        pygame.draw.rect(screen, GREY, StoryFrame2)
-        pygame.draw.rect(screen, GREY, StoryFrame3)
-        pygame.draw.rect(screen, GREY, StoryFrame4)
+        # pygame.draw.rect(screen, GREY, StoryFrame1)
+        # pygame.draw.rect(screen, GREY, StoryFrame2)
+        # pygame.draw.rect(screen, GREY, StoryFrame3)
+        # pygame.draw.rect(screen, GREY, StoryFrame4)
 
         # Draw next button
-        pygame.draw.circle(screen, RED, (StoryMenuNextBut.centerx, StoryMenuNextBut.centery), StoryMenuNextBut.width // 2)
+        # pygame.draw.circle(screen, RED, (StoryMenuNextBut.centerx, StoryMenuNextBut.centery), StoryMenuNextBut.width // 2)
         
     elif currentScreen == "GameMenu":
+
+        # UI for gameplay screen
+        VoyageLogoBut = scale_rect(0.946, 0.027, 0.045, 0.08)
+        ArtLogoBut = scale_rect(0.886, 0.027, 0.045, 0.08)
+        CameraBut = scale_rect(0.02, 0.36, 0.07, 0.12)
+        HomeGameplayBut = scale_rect(0.02, 0.52, 0.07, 0.12)
+        ShirtBut = scale_rect(0.89, 0.17, 0.06, 0.1)
+        PaintBut = scale_rect(0.89, 0.30, 0.06, 0.1)
+        ShoeBut = scale_rect(0.89, 0.43, 0.06, 0.1)
+        HatBut = scale_rect(0.89, 0.56, 0.06, 0.1)
+        SparePartsBut = scale_rect(0.89, 0.69, 0.06, 0.1)
+        EmotionBut = scale_rect(0.89, 0.82, 0.06, 0.1)
+
+        CharacterFrame = scale_rect(0.13, 0.09, 0.36, 0.85)
+        ItemFrame = scale_rect(0.54, 0.14, 0.38, 0.78)
         
         screen.fill(WHITE)
 
@@ -183,6 +171,17 @@ while run:
         
 
     elif currentScreen == "PrintScreenMenu":
+
+        # UI for print screen menu
+        VoyageLogoBut = scale_rect(0.946, 0.027, 0.045, 0.08)
+        ArtLogoBut = scale_rect(0.886, 0.027, 0.045, 0.08)
+        ReturnBut = scale_rect(0.02, 0.45, 0.07, 0.12)
+        HomePrintBut = scale_rect(0.02, 0.61, 0.07, 0.12)
+        NextPrintBut = scale_rect(0.925, 0.87, 0.055, 0.1)
+        PreviousPrintBut = scale_rect(0.855, 0.87, 0.055, 0.1)
+        PhotoFrame = scale_rect(0.32, 0.09, 0.36, 0.85)
+        DownloadBut = scale_rect(0.02, 0.28, 0.07, 0.12)
+
         # Print screen logic can go here
         screen.fill(WHITE)
         
