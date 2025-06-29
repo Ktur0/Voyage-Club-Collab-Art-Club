@@ -23,11 +23,34 @@ BLUE = (0, 0, 255)
 YELLOW = (255, 255, 0)
 GREY = (128, 128, 128)
 
+# Images for print screen
+# Đầu chương trình
+print_bg_files = [
+    "Asset/PrintBackGround/halongbay.png",
+    "Asset/PrintBackGround/paris.png",
+    "Asset/PrintBackGround/pyramid.png"
+]
+print_bg_index = 0
+PrintBackground = pygame.image.load(print_bg_files[print_bg_index])
+NextPrintButtonImage = pygame.image.load("Asset/Button/NextButton.png")
+PreviousPrintButtonImage = pygame.image.load("Asset/Button/PreviousButton.png")
+DownloadButtonImage = pygame.image.load("Asset/Button/DownloadButton.png")
+HomePrintButtonImage = pygame.image.load("Asset/Button/HomeButton.png")
+ReturnButtonImage = pygame.image.load("Asset/Button/PreviousButton.png")
+
 # Images for gameplay screen
-modelImage = pygame.image.load("Asset/ACAN-MENU/Model.png")
 GameplayBackground = pygame.image.load("Asset/RoomBackGround/GameplayBackGround.png")
 CameraButImage = pygame.image.load("Asset/Button/CameraButton.png")
 HomeGameplayButImage = pygame.image.load("Asset/Button/HomeButton.png")
+modelImage = pygame.image.load("Asset/ACAN-MENU/Model.png")
+SelectionStore = ''
+ShirtImage = ''
+PaintImage = ''
+ShoeImage = ''  
+HatImage = ''
+SparePartsImage = ''
+EmotionImage = ''
+
 
 # Story Frames
 StoryImage1 = pygame.image.load("Asset/COMIC/1.png")
@@ -97,11 +120,6 @@ while run:
                 if mouseHB.colliderect(StartBut):
                     currentScreen = "StoryMenu"
                     startTime = time.time()  # Record the start time for the story menu
-          
-        # # Draw buttons
-        # pygame.draw.circle(screen, RED, (VoyageLogoBut.centerx, VoyageLogoBut.centery), VoyageLogoBut.width // 2)
-        # pygame.draw.circle(screen, YELLOW, (ArtLogoBut.centerx, ArtLogoBut.centery), ArtLogoBut.width // 2)
-        # pygame.draw.circle(screen, GREY, (StartBut.centerx, StartBut.centery), StartBut.width // 2)
         
     elif currentScreen == "StoryMenu":
 
@@ -156,7 +174,45 @@ while run:
 
         CharacterFrame = scale_rect(0.13, 0.09, 0.36, 0.85)
         ItemFrame = scale_rect(0.54, 0.14, 0.38, 0.78)
-        
+
+        SelectButtons3x5 = [
+            scale_rect(0.58, 0.19, 0.07, 0.11),
+            scale_rect(0.7, 0.19, 0.07, 0.11),
+            scale_rect(0.81, 0.19, 0.07, 0.11),
+
+            scale_rect(0.58, 0.35, 0.07, 0.11),
+            scale_rect(0.7, 0.35, 0.07, 0.11),
+            scale_rect(0.81, 0.35, 0.07, 0.11),
+
+            scale_rect(0.58, 0.5, 0.07, 0.11),
+            scale_rect(0.7, 0.5, 0.07, 0.11),
+            scale_rect(0.81, 0.5, 0.07, 0.11),
+
+            scale_rect(0.58, 0.66, 0.07, 0.11),
+            scale_rect(0.7, 0.66, 0.07, 0.11),
+            scale_rect(0.81, 0.66, 0.07, 0.11),
+
+            scale_rect(0.65, 0.81, 0.07, 0.11),
+            scale_rect(0.77, 0.81, 0.07, 0.11)
+
+        ]
+
+        SelectButtons2x5 = [
+            scale_rect(0.64, 0.19, 0.07, 0.11),
+            scale_rect(0.76, 0.19, 0.07, 0.11),
+
+            scale_rect(0.64, 0.35, 0.07, 0.11),
+            scale_rect(0.76, 0.35, 0.07, 0.11),
+
+            scale_rect(0.64, 0.5, 0.07, 0.11),
+            scale_rect(0.76, 0.5, 0.07, 0.11),
+
+            scale_rect(0.64, 0.66, 0.07, 0.11),
+            scale_rect(0.76, 0.66, 0.07, 0.11),
+
+            scale_rect(0.64, 0.81, 0.07, 0.11),
+            scale_rect(0.76, 0.81, 0.07, 0.11)
+        ]
 
         clickClubButton(events)  # Check if club buttons are clicked
         for event in events:
@@ -167,26 +223,85 @@ while run:
                 
                 if mouseHB.colliderect(HomeGameplayBut):
                     currentScreen = "StartMenu"
+                
+                if SelectionStore == 'Shirt':
+                    for i in range(len(SelectButtons3x5)):
+                        if mouseHB.colliderect(SelectButtons3x5[i]):
+                            ShirtImage = pygame.image.load("Asset/Top/top" + str(i + 1) + '.png')
+                            break
+                
+                elif SelectionStore == 'Paint':
+                    for i in range(len(SelectButtons3x5)):
+                        if mouseHB.colliderect(SelectButtons3x5[i]):
+                            PaintImage = pygame.image.load("Asset/Bottom/bottom" + str(i + 1) + ".png")
+                            break
+                
+                elif SelectionStore == 'Shoe':
+                    for i in range(len(SelectButtons2x5)):
+                        if mouseHB.colliderect(SelectButtons2x5[i]):
+                            ShoeImage = pygame.image.load("Asset/Shoe/shoe" + str(i + 1) + ".png")
+                            break
+                
+                elif SelectionStore == 'Hat':
+                    for i in range(len(SelectButtons2x5)):
+                        if mouseHB.colliderect(SelectButtons2x5[i]):
+                            HatImage = pygame.image.load("Asset/Hat/hat" + str(i + 1) + ".png")
+                            break
+                
+                elif SelectionStore == 'SpareParts':
+                    for i in range(len(SelectButtons2x5)):
+                        if mouseHB.colliderect(SelectButtons2x5[i]):
+                            SparePartsImage = pygame.image.load("Asset/SparePart/sp" + str(i + 1) + ".png")
+                            break
+                
+                elif SelectionStore == 'Emotion':
+                    for i in range(len(SelectButtons2x5)):
+                        if mouseHB.colliderect(SelectButtons2x5[i]):
+                            EmotionImage = pygame.image.load("Asset/Emotion/emotion" + str(i + 1) + ".png")
+                            break
 
                 if mouseHB.colliderect(ShirtBut):
                     GameplayBackground = pygame.image.load("Asset/RoomBackGround/ShirtSelect.png")
+                    SelectionStore = 'Shirt'
+
                 if mouseHB.colliderect(PaintBut):
                     GameplayBackground = pygame.image.load("Asset/RoomBackGround/PaintSelect.png")
+                    SelectionStore = 'Paint'
+
                 if mouseHB.colliderect(ShoeBut):
                     GameplayBackground = pygame.image.load("Asset/RoomBackGround/ShoeSelect.png")
+                    SelectionStore = 'Shoe'
+
                 if mouseHB.colliderect(HatBut):
                     GameplayBackground = pygame.image.load("Asset/RoomBackGround/HatSelect.png")
+                    SelectionStore = 'Hat'
+
                 if mouseHB.colliderect(SparePartsBut):
                     GameplayBackground = pygame.image.load("Asset/RoomBackGround/SparePartSelect.png")
+                    SelectionStore = 'SpareParts'
+
                 if mouseHB.colliderect(EmotionBut):
                     GameplayBackground = pygame.image.load("Asset/RoomBackGround/EmotionSelect.png")
+                    SelectionStore = 'Emotion'
                 
         screen.blit(pygame.transform.smoothscale(GameplayBackground, (widthSr, heightSr)), (0, 0))  # Fill with gameplay background
         screen.blit(pygame.transform.smoothscale(modelImage, (CharacterFrame.width, CharacterFrame.height)), (CharacterFrame.x, CharacterFrame.y))  # Draw character frame
-        
         screen.blit(pygame.transform.smoothscale(CameraButImage, (CameraBut.width + 25, CameraBut.height + 25)), (CameraBut.x - 15, CameraBut.y - 15))  # Draw camera button
         screen.blit(pygame.transform.smoothscale(HomeGameplayButImage, (HomeGameplayBut.width + 25, HomeGameplayBut.height + 25)), (HomeGameplayBut.x - 15, HomeGameplayBut.y - 15))
         
+        if ShoeImage != '':
+            screen.blit(pygame.transform.smoothscale(ShoeImage, (CharacterFrame.width, CharacterFrame.height)), (CharacterFrame.x, CharacterFrame.y))
+        if ShirtImage != '':
+            screen.blit(pygame.transform.smoothscale(ShirtImage, (CharacterFrame.width, CharacterFrame.height)), (CharacterFrame.x, CharacterFrame.y))
+        if PaintImage != '':
+            screen.blit(pygame.transform.smoothscale(PaintImage, (CharacterFrame.width, CharacterFrame.height)), (CharacterFrame.x, CharacterFrame.y))
+        if EmotionImage != '':
+            screen.blit(pygame.transform.smoothscale(EmotionImage, (CharacterFrame.width, CharacterFrame.height)), (CharacterFrame.x, CharacterFrame.y))
+        if HatImage != '':
+            screen.blit(pygame.transform.smoothscale(HatImage, (CharacterFrame.width, CharacterFrame.height)), (CharacterFrame.x, CharacterFrame.y))
+        if SparePartsImage != '':
+            screen.blit(pygame.transform.smoothscale(SparePartsImage, (CharacterFrame.width, CharacterFrame.height)), (CharacterFrame.x, CharacterFrame.y))
+    
     elif currentScreen == "PrintScreenMenu":
 
         # UI for print screen menu
@@ -196,30 +311,32 @@ while run:
         HomePrintBut = scale_rect(0.02, 0.61, 0.07, 0.12)
         NextPrintBut = scale_rect(0.925, 0.87, 0.055, 0.1)
         PreviousPrintBut = scale_rect(0.855, 0.87, 0.055, 0.1)
-        PhotoFrame = scale_rect(0.32, 0.09, 0.36, 0.85)
         DownloadBut = scale_rect(0.02, 0.28, 0.07, 0.12)
+        CharacterFrame = scale_rect(0.36, 0.12, 0.36, 0.85)
 
-        # Print screen logic can go here
-        screen.fill(WHITE)
-        
-        # Draw photo frame
-        pygame.draw.rect(screen, GREY, PhotoFrame)
-
-        # Draw buttons
-        pygame.draw.circle(screen, RED, (VoyageLogoBut.centerx, VoyageLogoBut.centery), VoyageLogoBut.width // 2)
-        pygame.draw.circle(screen, YELLOW, (ArtLogoBut.centerx, ArtLogoBut.centery), ArtLogoBut.width // 2)
-        pygame.draw.circle(screen, GREEN, (DownloadBut.centerx, DownloadBut.centery), DownloadBut.width // 2)
-        pygame.draw.circle(screen, YELLOW, (ReturnBut.centerx, ReturnBut.centery), ReturnBut.width // 2)
-        pygame.draw.circle(screen, GREY, (HomePrintBut.centerx, HomePrintBut.centery), HomePrintBut.width // 2)
-        pygame.draw.circle(screen, GREY, (NextPrintBut.centerx, NextPrintBut.centery), NextPrintBut.width // 2)
-        pygame.draw.circle(screen, GREY, (PreviousPrintBut.centerx, PreviousPrintBut.centery), PreviousPrintBut.width // 2)
 
         # Check for button clicks
         clickClubButton(events)
         for event in events:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if mouseHB.colliderect(DownloadBut):
-                    subsurface = screen.subsurface(PhotoFrame).copy() 
+
+                    screen.blit(pygame.transform.smoothscale(PrintBackground, (widthSr, heightSr)), (0, 0))  # Fill with print background
+                    screen.blit(pygame.transform.smoothscale(modelImage, (CharacterFrame.width, CharacterFrame.height)), (CharacterFrame.x, CharacterFrame.y))  # Draw character frame
+
+                    if ShoeImage != '':
+                        screen.blit(pygame.transform.smoothscale(ShoeImage, (CharacterFrame.width, CharacterFrame.height)), (CharacterFrame.x, CharacterFrame.y))
+                    if ShirtImage != '':
+                        screen.blit(pygame.transform.smoothscale(ShirtImage, (CharacterFrame.width, CharacterFrame.height)), (CharacterFrame.x, CharacterFrame.y))
+                    if PaintImage != '':
+                        screen.blit(pygame.transform.smoothscale(PaintImage, (CharacterFrame.width, CharacterFrame.height)), (CharacterFrame.x, CharacterFrame.y))
+                    if EmotionImage != '':
+                        screen.blit(pygame.transform.smoothscale(EmotionImage, (CharacterFrame.width, CharacterFrame.height)), (CharacterFrame.x, CharacterFrame.y))
+                    if HatImage != '':
+                        screen.blit(pygame.transform.smoothscale(HatImage, (CharacterFrame.width, CharacterFrame.height)), (CharacterFrame.x, CharacterFrame.y))
+                    if SparePartsImage != '':
+                        screen.blit(pygame.transform.smoothscale(SparePartsImage, (CharacterFrame.width, CharacterFrame.height)), (CharacterFrame.x, CharacterFrame.y))
+                    subsurface = screen.subsurface((0,0, widthSr, heightSr)).copy() 
                     pygame.image.save(subsurface, "SavePicture/Screenshot"+str(countFilesInDirectory("SavePicture")) + ".png")
 
                 if mouseHB.colliderect(ReturnBut):
@@ -227,6 +344,43 @@ while run:
                      
                 if mouseHB.colliderect(HomePrintBut):
                     currentScreen = "StartMenu"
+
+                # Khi bấm nút Next
+                if mouseHB.colliderect(NextPrintBut):
+                    print_bg_index = (print_bg_index + 1) % len(print_bg_files)
+                    PrintBackground = pygame.image.load(print_bg_files[print_bg_index])
+
+                # Khi bấm nút Previous
+                if mouseHB.colliderect(PreviousPrintBut):
+                    print_bg_index = (print_bg_index - 1) % len(print_bg_files)
+                    PrintBackground = pygame.image.load(print_bg_files[print_bg_index])
+
+        # Print screen logic can go here
+        screen.blit(pygame.transform.smoothscale(PrintBackground, (widthSr, heightSr)), (0, 0))  # Fill with print background
+        
+        # Draw photo frame
+        
+
+        # Draw buttons
+        screen.blit(pygame.transform.smoothscale(DownloadButtonImage, (DownloadBut.width + 25, DownloadBut.height + 25)), (DownloadBut.x - 13, DownloadBut.y - 12))  # Draw download button
+        screen.blit(pygame.transform.smoothscale(HomePrintButtonImage, (HomePrintBut.width + 25, HomePrintBut.height + 25)), (HomePrintBut.x - 13, HomePrintBut.y - 12))  # Draw home print button
+        screen.blit(pygame.transform.smoothscale(ReturnButtonImage, (ReturnBut.width + 25, ReturnBut.height + 25)), (ReturnBut.x - 13, ReturnBut.y - 12))
+        screen.blit(pygame.transform.smoothscale(NextPrintButtonImage, (NextPrintBut.width + 20, NextPrintBut.height + 20)), (NextPrintBut.x - 12, NextPrintBut.y - 12))  # Draw next print button
+        screen.blit(pygame.transform.smoothscale(PreviousPrintButtonImage, (PreviousPrintBut.width + 20, PreviousPrintBut.height + 20)), (PreviousPrintBut.x - 12, PreviousPrintBut.y - 12))  # Draw previous print button  
+        screen.blit(pygame.transform.smoothscale(modelImage, (CharacterFrame.width, CharacterFrame.height)), (CharacterFrame.x, CharacterFrame.y))  # Draw character frame
+
+        if ShoeImage != '':
+            screen.blit(pygame.transform.smoothscale(ShoeImage, (CharacterFrame.width, CharacterFrame.height)), (CharacterFrame.x, CharacterFrame.y))
+        if ShirtImage != '':
+            screen.blit(pygame.transform.smoothscale(ShirtImage, (CharacterFrame.width, CharacterFrame.height)), (CharacterFrame.x, CharacterFrame.y))
+        if PaintImage != '':
+            screen.blit(pygame.transform.smoothscale(PaintImage, (CharacterFrame.width, CharacterFrame.height)), (CharacterFrame.x, CharacterFrame.y))
+        if EmotionImage != '':
+            screen.blit(pygame.transform.smoothscale(EmotionImage, (CharacterFrame.width, CharacterFrame.height)), (CharacterFrame.x, CharacterFrame.y)) 
+        if HatImage != '':
+            screen.blit(pygame.transform.smoothscale(HatImage, (CharacterFrame.width, CharacterFrame.height)), (CharacterFrame.x, CharacterFrame.y))
+        if SparePartsImage != '':
+            screen.blit(pygame.transform.smoothscale(SparePartsImage, (CharacterFrame.width, CharacterFrame.height)), (CharacterFrame.x, CharacterFrame.y))
         
     # Update screen
     pygame.display.update()
