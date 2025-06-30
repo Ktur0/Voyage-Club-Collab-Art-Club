@@ -2,6 +2,7 @@ import pygame
 import webbrowser
 import os
 import time
+import random
 
 pygame.init()
 
@@ -13,6 +14,7 @@ screen = pygame.display.set_mode((widthSr, heightSr))
 currentScreen = "StartMenu"
 run = True
 yGameTitle = 500
+music = pygame.mixer.music.load("Sound/sound" + str(random.randint(1,2)) +".mp3")
 
 # Colors    
 WHITE = (255, 255, 255)
@@ -107,6 +109,7 @@ while run:
         # UI for start screen
         VoyageLogoBut = scale_rect(0.946, 0.027, 0.045, 0.08)
         ArtLogoBut = scale_rect(0.886, 0.027, 0.045, 0.08)
+        SoundBut = scale_rect(0.835, 0.027, 0.045, 0.08)
         StartBut = scale_rect(0.45, 0.72, 0.1, 0.18)
 
         screen.blit(pygame.transform.smoothscale(StartMenuBackground, (widthSr, heightSr)), (0, 0))  # Fill with start menu background
@@ -120,6 +123,14 @@ while run:
                 if mouseHB.colliderect(StartBut):
                     currentScreen = "StoryMenu"
                     startTime = time.time()  # Record the start time for the story menu
+                
+                if mouseHB.colliderect(SoundBut):
+                    # Toggle sound on/off
+                    if pygame.mixer.music.get_busy():
+                        pygame.mixer.music.stop()
+                    else:
+                        pygame.mixer.music.load("Sound/sound" + str(random.randint(1,2)) +".mp3")
+                        pygame.mixer.music.play(-1)
         
     elif currentScreen == "StoryMenu":
 
@@ -163,6 +174,7 @@ while run:
         # UI for gameplay screen
         VoyageLogoBut = scale_rect(0.946, 0.027, 0.045, 0.08)
         ArtLogoBut = scale_rect(0.886, 0.027, 0.045, 0.08)
+        SoundBut = scale_rect(0.835, 0.027, 0.045, 0.08)
         CameraBut = scale_rect(0.02, 0.36, 0.07, 0.12)
         HomeGameplayBut = scale_rect(0.02, 0.52, 0.07, 0.12)
         ShirtBut = scale_rect(0.895, 0.175, 0.06, 0.1)
@@ -223,6 +235,14 @@ while run:
                 
                 if mouseHB.colliderect(HomeGameplayBut):
                     currentScreen = "StartMenu"
+                
+                if mouseHB.colliderect(SoundBut):
+                    # Toggle sound on/off
+                    if pygame.mixer.music.get_busy():
+                        pygame.mixer.music.stop()
+                    else:
+                        pygame.mixer.music.load("Sound/sound" + str(random.randint(1,2)) +".mp3")
+                        pygame.mixer.music.play(-1)
                 
                 if SelectionStore == 'Shirt':
                     for i in range(len(SelectButtons3x5)):
@@ -291,10 +311,10 @@ while run:
         
         if ShoeImage != '':
             screen.blit(pygame.transform.smoothscale(ShoeImage, (CharacterFrame.width, CharacterFrame.height)), (CharacterFrame.x, CharacterFrame.y))
-        if ShirtImage != '':
-            screen.blit(pygame.transform.smoothscale(ShirtImage, (CharacterFrame.width, CharacterFrame.height)), (CharacterFrame.x, CharacterFrame.y))
         if PaintImage != '':
             screen.blit(pygame.transform.smoothscale(PaintImage, (CharacterFrame.width, CharacterFrame.height)), (CharacterFrame.x, CharacterFrame.y))
+        if ShirtImage != '':
+            screen.blit(pygame.transform.smoothscale(ShirtImage, (CharacterFrame.width, CharacterFrame.height)), (CharacterFrame.x, CharacterFrame.y))
         if EmotionImage != '':
             screen.blit(pygame.transform.smoothscale(EmotionImage, (CharacterFrame.width, CharacterFrame.height)), (CharacterFrame.x, CharacterFrame.y))
         if HatImage != '':
@@ -307,6 +327,7 @@ while run:
         # UI for print screen menu
         VoyageLogoBut = scale_rect(0.946, 0.027, 0.045, 0.08)
         ArtLogoBut = scale_rect(0.886, 0.027, 0.045, 0.08)
+        SoundBut = scale_rect(0.835, 0.027, 0.045, 0.08)
         ReturnBut = scale_rect(0.02, 0.45, 0.07, 0.12)
         HomePrintBut = scale_rect(0.02, 0.61, 0.07, 0.12)
         NextPrintBut = scale_rect(0.925, 0.87, 0.055, 0.1)
@@ -326,16 +347,17 @@ while run:
 
                     if ShoeImage != '':
                         screen.blit(pygame.transform.smoothscale(ShoeImage, (CharacterFrame.width, CharacterFrame.height)), (CharacterFrame.x, CharacterFrame.y))
-                    if ShirtImage != '':
-                        screen.blit(pygame.transform.smoothscale(ShirtImage, (CharacterFrame.width, CharacterFrame.height)), (CharacterFrame.x, CharacterFrame.y))
                     if PaintImage != '':
                         screen.blit(pygame.transform.smoothscale(PaintImage, (CharacterFrame.width, CharacterFrame.height)), (CharacterFrame.x, CharacterFrame.y))
+                    if ShirtImage != '':
+                        screen.blit(pygame.transform.smoothscale(ShirtImage, (CharacterFrame.width, CharacterFrame.height)), (CharacterFrame.x, CharacterFrame.y))
                     if EmotionImage != '':
                         screen.blit(pygame.transform.smoothscale(EmotionImage, (CharacterFrame.width, CharacterFrame.height)), (CharacterFrame.x, CharacterFrame.y))
                     if HatImage != '':
                         screen.blit(pygame.transform.smoothscale(HatImage, (CharacterFrame.width, CharacterFrame.height)), (CharacterFrame.x, CharacterFrame.y))
                     if SparePartsImage != '':
                         screen.blit(pygame.transform.smoothscale(SparePartsImage, (CharacterFrame.width, CharacterFrame.height)), (CharacterFrame.x, CharacterFrame.y))
+                
                     subsurface = screen.subsurface((0,0, widthSr, heightSr)).copy() 
                     pygame.image.save(subsurface, "SavePicture/Screenshot"+str(countFilesInDirectory("SavePicture")) + ".png")
 
@@ -344,6 +366,14 @@ while run:
                      
                 if mouseHB.colliderect(HomePrintBut):
                     currentScreen = "StartMenu"
+
+                if mouseHB.colliderect(SoundBut):
+                    # Toggle sound on/off
+                    if pygame.mixer.music.get_busy():
+                        pygame.mixer.music.stop()
+                    else:
+                        pygame.mixer.music.load("Sound/sound"+ str(random.randint(1,2)) +".mp3")
+                        pygame.mixer.music.play(-1)
 
                 # Khi bấm nút Next
                 if mouseHB.colliderect(NextPrintBut):
@@ -357,9 +387,6 @@ while run:
 
         # Print screen logic can go here
         screen.blit(pygame.transform.smoothscale(PrintBackground, (widthSr, heightSr)), (0, 0))  # Fill with print background
-        
-        # Draw photo frame
-        
 
         # Draw buttons
         screen.blit(pygame.transform.smoothscale(DownloadButtonImage, (DownloadBut.width + 25, DownloadBut.height + 25)), (DownloadBut.x - 13, DownloadBut.y - 12))  # Draw download button
@@ -371,17 +398,17 @@ while run:
 
         if ShoeImage != '':
             screen.blit(pygame.transform.smoothscale(ShoeImage, (CharacterFrame.width, CharacterFrame.height)), (CharacterFrame.x, CharacterFrame.y))
-        if ShirtImage != '':
-            screen.blit(pygame.transform.smoothscale(ShirtImage, (CharacterFrame.width, CharacterFrame.height)), (CharacterFrame.x, CharacterFrame.y))
         if PaintImage != '':
             screen.blit(pygame.transform.smoothscale(PaintImage, (CharacterFrame.width, CharacterFrame.height)), (CharacterFrame.x, CharacterFrame.y))
+        if ShirtImage != '':
+            screen.blit(pygame.transform.smoothscale(ShirtImage, (CharacterFrame.width, CharacterFrame.height)), (CharacterFrame.x, CharacterFrame.y))
         if EmotionImage != '':
-            screen.blit(pygame.transform.smoothscale(EmotionImage, (CharacterFrame.width, CharacterFrame.height)), (CharacterFrame.x, CharacterFrame.y)) 
+            screen.blit(pygame.transform.smoothscale(EmotionImage, (CharacterFrame.width, CharacterFrame.height)), (CharacterFrame.x, CharacterFrame.y))
         if HatImage != '':
             screen.blit(pygame.transform.smoothscale(HatImage, (CharacterFrame.width, CharacterFrame.height)), (CharacterFrame.x, CharacterFrame.y))
         if SparePartsImage != '':
             screen.blit(pygame.transform.smoothscale(SparePartsImage, (CharacterFrame.width, CharacterFrame.height)), (CharacterFrame.x, CharacterFrame.y))
-        
+    
     # Update screen
     pygame.display.update()
     
