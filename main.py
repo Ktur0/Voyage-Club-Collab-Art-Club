@@ -10,7 +10,7 @@ pygame.init()
 screenInfo = pygame.display.Info() 
 pygame.display.set_caption("Voyage Club - Art Club")
 widthSr, heightSr = screenInfo.current_w, screenInfo.current_h
-screen = pygame.display.set_mode((widthSr, heightSr))
+screen = pygame.display.set_mode((widthSr, heightSr), pygame.RESIZABLE)
 currentScreen = "StartMenu"
 run = True
 yGameTitle = 500
@@ -40,7 +40,9 @@ GREY = (128, 128, 128)
 print_bg_files = [
     "Asset/PrintBackGround/halongbay.png",
     "Asset/PrintBackGround/paris.png",
-    "Asset/PrintBackGround/pyramid.png"
+    "Asset/PrintBackGround/pyramid.png",
+    "Asset/PrintBackGround/colosseum.png",
+    "Asset/PrintBackGround/bigben.png",
 ]
 print_bg_index = 0
 PrintBackground = pygame.image.load(print_bg_files[print_bg_index])
@@ -356,6 +358,7 @@ while run:
         DownloadBut = scale_rect(0.02, 0.28, 0.07, 0.12)
         CharacterFrame = scale_rect(0.36, 0.12, 0.36, 0.85)
 
+        PrintBackground = pygame.image.load(print_bg_files[print_bg_index])
 
         # Check for button clicks
         clickClubButton(events)
@@ -401,13 +404,14 @@ while run:
 
                 # Khi bấm nút Next
                 if mouseHB.colliderect(NextPrintBut):
-                    print_bg_index = (print_bg_index + 1) % len(print_bg_files)
-                    PrintBackground = pygame.image.load(print_bg_files[print_bg_index])
+                    if print_bg_index < len(print_bg_files) - 1:
+                        print_bg_index += 1
 
-                # Khi bấm nút Previous
                 if mouseHB.colliderect(PreviousPrintBut):
-                    print_bg_index = (print_bg_index - 1) % len(print_bg_files)
-                    PrintBackground = pygame.image.load(print_bg_files[print_bg_index])
+                    if print_bg_index > 0:
+                        print_bg_index -= 1
+
+
 
         # Print screen logic can go here
         screen.blit(pygame.transform.smoothscale(PrintBackground, (widthSr, heightSr)), (0, 0))  # Fill with print background
