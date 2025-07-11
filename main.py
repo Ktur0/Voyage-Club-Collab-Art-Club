@@ -16,7 +16,7 @@ run = True
 yGameTitle = 500
 # music = pygame.mixer.music.load("Sound/sound" + str(random.randint(1,2)) +".mp3")
 
-# Setup âm thanh
+# Setup âm thanh7
 sound_files = ["Sound/sound1.mp3", "Sound/sound2.mp3"]
 current_sound_index = random.randint(0, len(sound_files) - 1)
 MUSIC_END = pygame.USEREVENT + 1
@@ -37,6 +37,14 @@ GREY = (128, 128, 128)
 
 # Images for print screen
 # Đầu chương trình
+print_bg_files_no_logo = [
+    "Asset/PrintBackGround/halongbay1.png",
+    "Asset/PrintBackGround/paris1.png",
+    "Asset/PrintBackGround/pyramid1.png",
+    "Asset/PrintBackGround/colosseum1.png",
+    "Asset/PrintBackGround/bigben1.png"
+]
+
 print_bg_files = [
     "Asset/PrintBackGround/halongbay.png",
     "Asset/PrintBackGround/paris.png",
@@ -81,12 +89,15 @@ mouseHB = pygame.Rect(xMouse, yMouse, mouseSize, mouseSize)
 
 # Check clickable on club logos
 def clickClubButton(events):
+    global run
     for event in events:
         if event.type == pygame.MOUSEBUTTONDOWN:
             if mouseHB.colliderect(VoyageLogoBut):
                 webbrowser.open("https://www.facebook.com/voyage.stc")
             if mouseHB.colliderect(ArtLogoBut):
                 webbrowser.open("https://www.facebook.com/ArtclubTHD")
+            if mouseHB.colliderect(QuitBut):
+                run = False
 
 def scale_rect(xr, yr, wr, hr):
     return pygame.Rect(int(xr* widthSr), int(yr * heightSr), int(wr * widthSr), int(hr * heightSr))
@@ -122,6 +133,7 @@ while run:
         GameTitle = pygame.image.load("Asset/ACAN-MENU/GameTitle.png")
 
         # UI for start screen
+        QuitBut = scale_rect(0.02, 0.027, 0.045, 0.08)
         VoyageLogoBut = scale_rect(0.946, 0.027, 0.045, 0.08)
         ArtLogoBut = scale_rect(0.886, 0.027, 0.045, 0.08)
         SoundBut = scale_rect(0.835, 0.027, 0.045, 0.08)
@@ -130,7 +142,7 @@ while run:
         screen.blit(pygame.transform.smoothscale(StartMenuBackground, (widthSr, heightSr)), (0, 0))  # Fill with start menu background
         screen.blit(pygame.transform.smoothscale(GameTitle, (widthSr, heightSr)), (0, 0 + yGameTitle))  # Draw game title
         screen.blit(pygame.transform.smoothscale(StartButton, (StartBut.width, StartBut.height)), (StartBut.x, StartBut.y))  # Draw start button
-
+        
         clickClubButton(events)  # Check if club buttons are clicked
         for event in events:    
             if event.type == pygame.MOUSEBUTTONDOWN:
@@ -146,8 +158,7 @@ while run:
                     else:
                         current_sound_index = random.randint(0, len(sound_files) - 1)
                         play_music(current_sound_index)
-
-        
+      
     elif currentScreen == "StoryMenu":
 
         # UI for story screen
@@ -188,6 +199,7 @@ while run:
     elif currentScreen == "GameMenu":
 
         # UI for gameplay screen
+        QuitBut = scale_rect(0.02, 0.027, 0.045, 0.08)
         VoyageLogoBut = scale_rect(0.946, 0.027, 0.045, 0.08)
         ArtLogoBut = scale_rect(0.886, 0.027, 0.045, 0.08)
         SoundBut = scale_rect(0.835, 0.027, 0.045, 0.08)
@@ -327,8 +339,8 @@ while run:
                 
         screen.blit(pygame.transform.smoothscale(GameplayBackground, (widthSr, heightSr)), (0, 0))  # Fill with gameplay background
         screen.blit(pygame.transform.smoothscale(modelImage, (CharacterFrame.width, CharacterFrame.height)), (CharacterFrame.x, CharacterFrame.y))  # Draw character frame
-        screen.blit(pygame.transform.smoothscale(CameraButImage, (CameraBut.width + 25, CameraBut.height + 25)), (CameraBut.x - 15, CameraBut.y - 15))  # Draw camera button
-        screen.blit(pygame.transform.smoothscale(HomeGameplayButImage, (HomeGameplayBut.width + 25, HomeGameplayBut.height + 25)), (HomeGameplayBut.x - 15, HomeGameplayBut.y - 15))
+        # screen.blit(pygame.transform.smoothscale(CameraButImage, (CameraBut.width + 25, CameraBut.height + 25)), (CameraBut.x - 15, CameraBut.y - 15))  # Draw camera button
+        # screen.blit(pygame.transform.smoothscale(HomeGameplayButImage, (HomeGameplayBut.width + 25, HomeGameplayBut.height + 25)), (HomeGameplayBut.x - 15, HomeGameplayBut.y - 15))
         
         if ShoeImage != '':
             screen.blit(pygame.transform.smoothscale(ShoeImage, (CharacterFrame.width, CharacterFrame.height)), (CharacterFrame.x, CharacterFrame.y))
@@ -348,6 +360,7 @@ while run:
     elif currentScreen == "PrintScreenMenu":
 
         # UI for print screen menu
+        QuitBut = scale_rect(0.02, 0.027, 0.045, 0.08)
         VoyageLogoBut = scale_rect(0.946, 0.027, 0.045, 0.08)
         ArtLogoBut = scale_rect(0.886, 0.027, 0.045, 0.08)
         SoundBut = scale_rect(0.835, 0.027, 0.045, 0.08)
@@ -365,6 +378,8 @@ while run:
         for event in events:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if mouseHB.colliderect(DownloadBut):
+
+                    PrintBackground = pygame.image.load(print_bg_files_no_logo[print_bg_index])
 
                     screen.blit(pygame.transform.smoothscale(PrintBackground, (widthSr, heightSr)), (0, 0))  # Fill with print background
                     screen.blit(pygame.transform.smoothscale(modelImage, (CharacterFrame.width, CharacterFrame.height)), (CharacterFrame.x, CharacterFrame.y))  # Draw character frame
