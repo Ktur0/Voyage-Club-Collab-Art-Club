@@ -16,15 +16,20 @@ run = True
 yGameTitle = 500
 # music = pygame.mixer.music.load("Sound/sound" + str(random.randint(1,2)) +".mp3")
 
-# Setup âm thanh7
+# Setup âm thanh
 sound_files = ["Sound/sound1.mp3", "Sound/sound2.mp3"]
-current_sound_index = random.randint(0, len(sound_files) - 1)
+playlist = sound_files[:]  # copy danh sách gốc
+random.shuffle(playlist)   # trộn thứ tự ban đầu
+current_track = 0
+
 MUSIC_END = pygame.USEREVENT + 1
 pygame.mixer.music.set_endevent(MUSIC_END)
 
-def play_music(index):
-    pygame.mixer.music.load(sound_files[index])
+def play_music(file_path):
+    pygame.mixer.music.load(file_path)
     pygame.mixer.music.play()
+
+play_music(playlist[current_track])  # Phát bài đầu tiên trong playlist
 
 # Colors    
 WHITE = (255, 255, 255)
@@ -105,8 +110,6 @@ def scale_rect(xr, yr, wr, hr):
 def countFilesInDirectory(directory):
     return len([name for name in os.listdir(directory) if os.path.isfile(os.path.join(directory, name))])
 
-play_music(current_sound_index)
-
 # Main loop
 while run:
 
@@ -158,6 +161,14 @@ while run:
                     else:
                         current_sound_index = random.randint(0, len(sound_files) - 1)
                         play_music(current_sound_index)
+                
+                if event.type == MUSIC_END:
+                    current_track += 1
+                    if current_track >= len(playlist):
+                        random.shuffle(playlist)
+                        current_track = 0
+                    play_music(playlist[current_track])
+
       
     elif currentScreen == "StoryMenu":
 
@@ -195,6 +206,14 @@ while run:
                 # Check for next button click
                 if mouseHB.colliderect(StoryMenuNextBut):
                    currentScreen = "GameMenu"
+                
+                if event.type == MUSIC_END:
+                    current_track += 1
+                    if current_track >= len(playlist):
+                        random.shuffle(playlist)
+                        current_track = 0
+                    play_music(playlist[current_track])
+
         
     elif currentScreen == "GameMenu":
 
@@ -256,6 +275,14 @@ while run:
 
         clickClubButton(events)  # Check if club buttons are clicked
         for event in events:
+
+            if event.type == MUSIC_END:
+                current_track += 1
+                if current_track >= len(playlist):
+                    random.shuffle(playlist)
+                    current_track = 0
+                play_music(playlist[current_track])
+
             # Check for button clicks
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if mouseHB.colliderect(CameraBut):
@@ -376,6 +403,14 @@ while run:
         # Check for button clicks
         clickClubButton(events)
         for event in events:
+
+            if event.type == MUSIC_END:
+                current_track += 1
+                if current_track >= len(playlist):
+                    random.shuffle(playlist)
+                    current_track = 0
+                play_music(playlist[current_track])
+
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if mouseHB.colliderect(DownloadBut):
 
