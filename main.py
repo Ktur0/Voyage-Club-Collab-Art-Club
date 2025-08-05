@@ -8,7 +8,7 @@ pygame.init()
 
 # Set up screen
 screenInfo = pygame.display.Info() 
-pygame.display.set_caption("Voyage Club - Art Club")
+pygame.display.set_caption("ACAN STYLE TOUR")
 widthSr, heightSr = screenInfo.current_w , screenInfo.current_h
 screen = pygame.display.set_mode((widthSr, heightSr), pygame.RESIZABLE)
 currentScreen = "StartMenu"
@@ -135,7 +135,6 @@ while run:
                 random.shuffle(playlist)
                 current_track = 0
             play_music(playlist[current_track])
-
   
     # Start menu logic
     if currentScreen == "StartMenu":

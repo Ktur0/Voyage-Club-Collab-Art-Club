@@ -8,8 +8,8 @@ pygame.init()
 
 # Set up screen
 screenInfo = pygame.display.Info() 
-pygame.display.set_caption("Voyage Club - Art Club")
-widthSr, heightSr = screenInfo.current_w - 200, screenInfo.current_h
+pygame.display.set_caption("ACAN STYLE TOUR")
+widthSr, heightSr = screenInfo.current_w - 200 , screenInfo.current_h
 screen = pygame.display.set_mode((widthSr, heightSr), pygame.RESIZABLE)
 currentScreen = "StartMenu"
 run = True
@@ -17,6 +17,7 @@ yGameTitle = 500
 # music = pygame.mixer.music.load("Sound/sound" + str(random.randint(1,2)) +".mp3")
 
 # Setup âm thanh
+music_on = True  # ban đầu đang bật nhạc
 sound_files = ["Sound/sound1.mp3", "Sound/sound2.mp3"]
 playlist = sound_files[:]  # copy danh sách gốc
 random.shuffle(playlist)   # trộn thứ tự ban đầu
@@ -26,8 +27,13 @@ MUSIC_END = pygame.USEREVENT + 1
 pygame.mixer.music.set_endevent(MUSIC_END)
 
 def play_music(file_path):
-    pygame.mixer.music.load(file_path)
-    pygame.mixer.music.play()
+    try:
+        pygame.mixer.music.load(file_path)
+        pygame.mixer.music.play()
+        print(f"Playing: {file_path}")
+    except Exception as e:
+        print(f"Failed to play {file_path}: {e}")
+
 
 play_music(playlist[current_track])  # Phát bài đầu tiên trong playlist
 
@@ -123,7 +129,13 @@ while run:
     for event in events:
         if event.type == pygame.QUIT:
             run = False
-    
+        if event.type == MUSIC_END and music_on:
+            current_track += 1
+            if current_track >= len(playlist):
+                random.shuffle(playlist)
+                current_track = 0
+            play_music(playlist[current_track])
+  
     # Start menu logic
     if currentScreen == "StartMenu":
 
@@ -148,28 +160,21 @@ while run:
         
         clickClubButton(events)  # Check if club buttons are clicked
         for event in events:    
+
             if event.type == pygame.MOUSEBUTTONDOWN:
                 # Check if the mouse is over the start button
                 if mouseHB.colliderect(StartBut):
                     currentScreen = "StoryMenu"
-                    startTime = time.time()  # Record the start time for the story menu
-                
+                    startTime = time.time()  # Record the start time for the story menu              
+     
                 if mouseHB.colliderect(SoundBut):
                     # Toggle sound on/off
-                    if pygame.mixer.music.get_busy():
-                        pygame.mixer.music.stop()
+                    music_on = not music_on
+                    if music_on:
+                        play_music(playlist[current_track])
                     else:
-                        current_sound_index = random.randint(0, len(sound_files) - 1)
-                        play_music(current_sound_index)
-                
-                if event.type == MUSIC_END:
-                    current_track += 1
-                    if current_track >= len(playlist):
-                        random.shuffle(playlist)
-                        current_track = 0
-                    play_music(playlist[current_track])
-
-      
+                        pygame.mixer.music.stop()
+    
     elif currentScreen == "StoryMenu":
 
         # UI for story screen
@@ -202,18 +207,11 @@ while run:
 
         clickClubButton(events)
         for event in events:
+
             if event.type == pygame.MOUSEBUTTONDOWN:
                 # Check for next button click
                 if mouseHB.colliderect(StoryMenuNextBut):
                    currentScreen = "GameMenu"
-                
-                if event.type == MUSIC_END:
-                    current_track += 1
-                    if current_track >= len(playlist):
-                        random.shuffle(playlist)
-                        current_track = 0
-                    play_music(playlist[current_track])
-
         
     elif currentScreen == "GameMenu":
 
@@ -276,13 +274,6 @@ while run:
         clickClubButton(events)  # Check if club buttons are clicked
         for event in events:
 
-            if event.type == MUSIC_END:
-                current_track += 1
-                if current_track >= len(playlist):
-                    random.shuffle(playlist)
-                    current_track = 0
-                play_music(playlist[current_track])
-
             # Check for button clicks
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if mouseHB.colliderect(CameraBut):
@@ -293,11 +284,12 @@ while run:
                 
                 if mouseHB.colliderect(SoundBut):
                     # Toggle sound on/off
-                    if pygame.mixer.music.get_busy():
-                        pygame.mixer.music.stop()
+                    music_on = not music_on
+                    if music_on:
+                        play_music(playlist[current_track])
                     else:
-                        current_sound_index = random.randint(0, len(sound_files) - 1)
-                        play_music(current_sound_index)
+                        pygame.mixer.music.stop()
+
                 
                 if SelectionStore == 'Shirt':
                     for i in range(len(SelectButtons3x5)):
@@ -404,13 +396,6 @@ while run:
         clickClubButton(events)
         for event in events:
 
-            if event.type == MUSIC_END:
-                current_track += 1
-                if current_track >= len(playlist):
-                    random.shuffle(playlist)
-                    current_track = 0
-                play_music(playlist[current_track])
-
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if mouseHB.colliderect(DownloadBut):
 
@@ -445,11 +430,11 @@ while run:
 
                 if mouseHB.colliderect(SoundBut):
                     # Toggle sound on/off
-                    if pygame.mixer.music.get_busy():
-                        pygame.mixer.music.stop()
+                    music_on = not music_on
+                    if music_on:
+                        play_music(playlist[current_track])
                     else:
-                        current_sound_index = random.randint(0, len(sound_files) - 1)
-                        play_music(current_sound_index)
+                        pygame.mixer.music.stop()
 
 
                 # Khi bấm nút Next
@@ -460,8 +445,6 @@ while run:
                 if mouseHB.colliderect(PreviousPrintBut):
                     if print_bg_index > 0:
                         print_bg_index -= 1
-
-
 
         # Print screen logic can go here
         screen.blit(pygame.transform.smoothscale(PrintBackground, (widthSr, heightSr)), (0, 0))  # Fill with print background
