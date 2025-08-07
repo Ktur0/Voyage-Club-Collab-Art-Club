@@ -2,6 +2,7 @@ import pygame
 import webbrowser
 import os
 import time
+import subprocess
 import random
 
 pygame.init()
@@ -418,9 +419,28 @@ while run:
                         screen.blit(pygame.transform.smoothscale(HatImage, (CharacterFrame.width, CharacterFrame.height)), (CharacterFrame.x, CharacterFrame.y))
                     if SparePartsImage != '':
                         screen.blit(pygame.transform.smoothscale(SparePartsImage, (CharacterFrame.width, CharacterFrame.height)), (CharacterFrame.x, CharacterFrame.y))
-                
-                    subsurface = screen.subsurface((0,0, widthSr, heightSr)).copy() 
-                    pygame.image.save(subsurface, "SavePicture/Screenshot"+str(countFilesInDirectory("SavePicture")) + ".png")
+                    
+                    # Lấy đường dẫn tới thư mục Desktop
+                    desktop_path = os.path.join(os.path.expanduser("~"), "Downloads")
+
+                    # Tạo thư mục SavePicture trên Desktop nếu chưa có
+                    save_folder = os.path.join(desktop_path, "SavePicture")
+                    if not os.path.exists(save_folder):
+                        os.makedirs(save_folder)
+
+                    # Tạo tên file ảnh
+                    filename = os.path.join(save_folder, "Screenshot" + str(countFilesInDirectory(save_folder)) + ".png")
+                    
+                    # Lấy kích thước thật của màn hình
+                    screen_width, screen_height = screen.get_size()
+
+                    # Đảm bảo widthSr và heightSr không vượt quá kích thước màn hình
+                    crop_width = min(widthSr, screen_width)
+                    crop_height = min(heightSr, screen_height)
+                    
+                    # Tạo ảnh con và lưu
+                    subsurface = screen.subsurface((0, 0, crop_width, crop_height)).copy()
+                    pygame.image.save(subsurface, filename)  # Lưu ảnh vào thư mục SavePicture
 
                 if mouseHB.colliderect(ReturnBut):
                     currentScreen = "GameMenu"
