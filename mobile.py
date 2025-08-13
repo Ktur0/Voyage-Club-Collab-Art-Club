@@ -7,9 +7,10 @@ import random
 pygame.init()
 
 # Đường dẫn tuyệt đối
-ASSET_DIR = os.path.abspath("Asset")
-SOUND_DIR = os.path.abspath("Sound")
-SAVE_PIC_DIR = os.path.abspath("SavePicture")
+BASE_DIR = os.path.dirname(__file__)  # thư mục chứa main.py
+ASSET_DIR = os.path.join(BASE_DIR, "Asset")
+SOUND_DIR = os.path.join(BASE_DIR, "Sound")
+SAVE_PIC_DIR = os.path.join(BASE_DIR, "SavePicture")
 
 # Set up screen
 screenInfo = pygame.display.Info() 
@@ -44,7 +45,11 @@ def play_music(file_path):
 
 # Load assets
 def load_asset(*path_parts):
-    return pygame.image.load(os.path.join(ASSET_DIR, *path_parts))
+    file_path = os.path.join(ASSET_DIR, *path_parts)
+    if not os.path.exists(file_path):
+        print(f"[ERROR] Missing asset: {file_path}")
+        return pygame.Surface((100, 100))  # trả về ảnh trống thay vì crash
+    return pygame.image.load(file_path)
 
 play_music(playlist[current_track])  # Phát bài đầu tiên trong playlist
 
